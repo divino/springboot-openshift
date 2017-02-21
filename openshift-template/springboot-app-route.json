@@ -1,0 +1,52 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "springboot-app",
+        "creationTimestamp": null
+    },
+    "objects": [
+        {
+            "kind": "Route",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "springboot-openshift",
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "springboot-openshift"
+                },
+                "annotations": {
+                    "openshift.io/host.generated": "true"
+                }
+            },
+            "spec": {
+                "host": "springboot-openshift-springboot.rhel-cdk.10.1.2.2.xip.io",
+                "to": {
+                    "kind": "Service",
+                    "name": "springboot-openshift",
+                    "weight": 100
+                },
+                "port": {
+                    "targetPort": "8080-tcp"
+                },
+                "wildcardPolicy": "None"
+            },
+            "status": {
+                "ingress": [
+                    {
+                        "host": "springboot-openshift-springboot.rhel-cdk.10.1.2.2.xip.io",
+                        "routerName": "router",
+                        "conditions": [
+                            {
+                                "type": "Admitted",
+                                "status": "True",
+                                "lastTransitionTime": "2017-02-21T11:59:19Z"
+                            }
+                        ],
+                        "wildcardPolicy": "None"
+                    }
+                ]
+            }
+        }
+    ]
+}

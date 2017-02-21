@@ -1,0 +1,212 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "springboot-app",
+        "creationTimestamp": null
+    },
+    "objects": [
+        {
+            "kind": "DeploymentConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "mysql-56-centos7",
+                "generation": 1,
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "mysql-56-centos7"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewApp"
+                }
+            },
+            "spec": {
+                "strategy": {
+                    "type": "Rolling",
+                    "rollingParams": {
+                        "updatePeriodSeconds": 1,
+                        "intervalSeconds": 1,
+                        "timeoutSeconds": 600,
+                        "maxUnavailable": "25%",
+                        "maxSurge": "25%"
+                    },
+                    "resources": {}
+                },
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange",
+                        "imageChangeParams": {
+                            "automatic": true,
+                            "containerNames": [
+                                "mysql-56-centos7"
+                            ],
+                            "from": {
+                                "kind": "ImageStreamTag",
+                                "namespace": "springboot",
+                                "name": "mysql-56-centos7:latest"
+                            }
+                        }
+                    }
+                ],
+                "replicas": 1,
+                "test": false,
+                "selector": {
+                    "app": "mysql-56-centos7",
+                    "deploymentconfig": "mysql-56-centos7"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "mysql-56-centos7",
+                            "deploymentconfig": "mysql-56-centos7"
+                        },
+                        "annotations": {
+                            "openshift.io/container.mysql-56-centos7.image.entrypoint": "[\"run-mysqld.sh\",\"mysqld\"]",
+                            "openshift.io/generated-by": "OpenShiftNewApp"
+                        }
+                    },
+                    "spec": {
+                        "volumes": [
+                            {
+                                "name": "mysql-56-centos7-volume-1",
+                                "emptyDir": {}
+                            }
+                        ],
+                        "containers": [
+                            {
+                                "name": "mysql-56-centos7",
+                                "image": "openshift/mysql-56-centos7@sha256:3fd34fda8d10cae95a1e0756d90a8f7d5bc7b90d25ab65549a72ad2206cae92f",
+                                "ports": [
+                                    {
+                                        "containerPort": 3306,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "env": [
+                                    {
+                                        "name": "MYSQL_DATABASE",
+                                        "value": "test"
+                                    },
+                                    {
+                                        "name": "MYSQL_PASSWORD",
+                                        "value": "password"
+                                    },
+                                    {
+                                        "name": "MYSQL_USER",
+                                        "value": "root"
+                                    }
+                                ],
+                                "resources": {},
+                                "volumeMounts": [
+                                    {
+                                        "name": "mysql-56-centos7-volume-1",
+                                        "mountPath": "/var/lib/mysql/data"
+                                    }
+                                ],
+                                "terminationMessagePath": "/dev/termination-log",
+                                "imagePullPolicy": "Always"
+                            }
+                        ],
+                        "restartPolicy": "Always",
+                        "terminationGracePeriodSeconds": 30,
+                        "dnsPolicy": "ClusterFirst",
+                        "securityContext": {}
+                    }
+                }
+            },
+            "status": {}
+        },
+        {
+            "kind": "DeploymentConfig",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "springboot-openshift",
+                "generation": 1,
+                "creationTimestamp": null,
+                "labels": {
+                    "app": "springboot-openshift"
+                },
+                "annotations": {
+                    "openshift.io/generated-by": "OpenShiftNewApp"
+                }
+            },
+            "spec": {
+                "strategy": {
+                    "type": "Rolling",
+                    "rollingParams": {
+                        "updatePeriodSeconds": 1,
+                        "intervalSeconds": 1,
+                        "timeoutSeconds": 600,
+                        "maxUnavailable": "25%",
+                        "maxSurge": "25%"
+                    },
+                    "resources": {}
+                },
+                "triggers": [
+                    {
+                        "type": "ConfigChange"
+                    },
+                    {
+                        "type": "ImageChange",
+                        "imageChangeParams": {
+                            "automatic": true,
+                            "containerNames": [
+                                "springboot-openshift"
+                            ],
+                            "from": {
+                                "kind": "ImageStreamTag",
+                                "namespace": "springboot",
+                                "name": "springboot-openshift:latest"
+                            }
+                        }
+                    }
+                ],
+                "replicas": 1,
+                "test": false,
+                "selector": {
+                    "app": "springboot-openshift",
+                    "deploymentconfig": "springboot-openshift"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "app": "springboot-openshift",
+                            "deploymentconfig": "springboot-openshift"
+                        },
+                        "annotations": {
+                            "openshift.io/container.springboot-openshift.image.entrypoint": "[\"container-entrypoint\",\"/bin/sh\",\"-c\",\"$STI_SCRIPTS_PATH/usage\"]",
+                            "openshift.io/generated-by": "OpenShiftNewApp"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "name": "springboot-openshift",
+                                "image": "172.30.102.105:5000/springboot/springboot-openshift@sha256:18a2b077e0fbc23c8335216327610323458ad0c5fda7543cdb8868f869003ee6",
+                                "ports": [
+                                    {
+                                        "containerPort": 8080,
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "resources": {},
+                                "terminationMessagePath": "/dev/termination-log",
+                                "imagePullPolicy": "Always"
+                            }
+                        ],
+                        "restartPolicy": "Always",
+                        "terminationGracePeriodSeconds": 30,
+                        "dnsPolicy": "ClusterFirst",
+                        "securityContext": {}
+                    }
+                }
+            },
+            "status": {}
+        }
+    ]
+}

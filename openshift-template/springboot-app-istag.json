@@ -1,0 +1,116 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "springboot-app",
+        "creationTimestamp": null
+    },
+    "objects": [
+        {
+            "kind": "ImageStreamTag",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "mysql-56-centos7:latest",
+                "creationTimestamp": null,
+                "annotations": {
+                    "openshift.io/imported-from": "openshift/mysql-56-centos7"
+                }
+            },
+            "tag": {
+                "name": "latest",
+                "annotations": {
+                    "openshift.io/imported-from": "openshift/mysql-56-centos7"
+                },
+                "from": {
+                    "kind": "DockerImage",
+                    "name": "openshift/mysql-56-centos7"
+                },
+                "generation": 2,
+                "importPolicy": {}
+            },
+            "generation": 2,
+            "image": {
+                "metadata": {
+                    "name": "sha256:3fd34fda8d10cae95a1e0756d90a8f7d5bc7b90d25ab65549a72ad2206cae92f",
+                    "creationTimestamp": null
+                },
+                "dockerImageReference": "openshift/mysql-56-centos7@sha256:3fd34fda8d10cae95a1e0756d90a8f7d5bc7b90d25ab65549a72ad2206cae92f",
+                "dockerImageMetadata": {
+                    "kind": "DockerImage",
+                    "apiVersion": "1.0",
+                    "Id": "",
+                    "Created": null,
+                    "ContainerConfig": {}
+                },
+                "dockerImageMetadataVersion": "1.0",
+                "dockerImageLayers": null
+            }
+        },
+        {
+            "kind": "ImageStreamTag",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "springboot-maven3-centos:latest",
+                "creationTimestamp": null,
+                "annotations": {
+                    "openshift.io/imported-from": "codecentric/springboot-maven3-centos"
+                }
+            },
+            "tag": {
+                "name": "latest",
+                "annotations": {
+                    "openshift.io/imported-from": "codecentric/springboot-maven3-centos"
+                },
+                "from": {
+                    "kind": "DockerImage",
+                    "name": "codecentric/springboot-maven3-centos"
+                },
+                "generation": 2,
+                "importPolicy": {}
+            },
+            "generation": 2,
+            "image": {
+                "metadata": {
+                    "name": "sha256:b39d58f7beaf97c68047f82a45f74ee1173d162d36f066caa5f11496629f7b13",
+                    "creationTimestamp": null
+                },
+                "dockerImageReference": "codecentric/springboot-maven3-centos@sha256:b39d58f7beaf97c68047f82a45f74ee1173d162d36f066caa5f11496629f7b13",
+                "dockerImageMetadata": {
+                    "kind": "DockerImage",
+                    "apiVersion": "1.0",
+                    "Id": "",
+                    "Created": null,
+                    "ContainerConfig": {}
+                },
+                "dockerImageMetadataVersion": "1.0",
+                "dockerImageLayers": null
+            }
+        },
+        {
+            "kind": "ImageStreamTag",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "springboot-openshift:latest",
+                "creationTimestamp": null
+            },
+            "tag": null,
+            "generation": 1,
+            "image": {
+                "metadata": {
+                    "name": "sha256:18a2b077e0fbc23c8335216327610323458ad0c5fda7543cdb8868f869003ee6",
+                    "creationTimestamp": null
+                },
+                "dockerImageReference": "172.30.102.105:5000/springboot/springboot-openshift@sha256:18a2b077e0fbc23c8335216327610323458ad0c5fda7543cdb8868f869003ee6",
+                "dockerImageMetadata": {
+                    "kind": "DockerImage",
+                    "apiVersion": "1.0",
+                    "Id": "",
+                    "Created": null,
+                    "ContainerConfig": {}
+                },
+                "dockerImageMetadataVersion": "1.0",
+                "dockerImageLayers": null
+            }
+        }
+    ]
+}

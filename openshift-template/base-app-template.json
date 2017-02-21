@@ -1,0 +1,387 @@
+{
+	"kind": "Template",
+	"apiVersion": "v1",
+	"metadata": {
+		"name": "rest-demo",
+		"creationTimestamp": null
+	},
+	"objects": [{
+		"kind": "BuildConfig",
+		"apiVersion": "v1",
+		"metadata": {
+			"name": "tomcat",
+			"creationTimestamp": null,
+			"labels": {
+				"app": "tomcat"
+			},
+			"annotations": {
+				"openshift.io/generated-by": "OpenShiftWebConsole"
+			}
+		},
+		"spec": {
+			"triggers": [{
+				"type": "Generic",
+				"generic": {
+					"secret": "51ce638141b71cd2"
+				}
+			}, {
+				"type": "GitHub",
+				"github": {
+					"secret": "2257e14f5abab19f"
+				}
+			}, {
+				"type": "ImageChange",
+				"imageChange": {}
+			}, {
+				"type": "ConfigChange"
+			}],
+			"source": {
+				"type": "Git",
+				"git": {
+					"uri": "https://github.com/corpbob/demo-restWS-spring-jersey-jpa2-hibernate.git",
+					"ref": "master"
+				},
+				"secrets": null
+			},
+			"strategy": {
+				"type": "Source",
+				"sourceStrategy": {
+					"from": {
+						"kind": "ImageStreamTag",
+						"namespace": "openshift",
+						"name": "jboss-webserver30-tomcat7-openshift:1.2"
+					}
+				}
+			},
+			"output": {
+				"to": {
+					"kind": "ImageStreamTag",
+					"name": "tomcat:latest"
+				}
+			},
+			"resources": {},
+			"postCommit": {}
+		},
+		"status": {
+			"lastVersion": 0
+		}
+	}, {
+		"kind": "ImageStream",
+		"apiVersion": "v1",
+		"metadata": {
+			"name": "mysql-56-centos7",
+			"generation": 2,
+			"creationTimestamp": null,
+			"labels": {
+				"app": "mysql-56-centos7"
+			},
+			"annotations": {
+				"openshift.io/generated-by": "OpenShiftNewApp",
+				"openshift.io/image.dockerRepositoryCheck": "2016-10-14T17:53:26Z"
+			}
+		}
+	}, {
+		"kind": "ImageStream",
+		"apiVersion": "v1",
+		"metadata": {
+			"name": "tomcat",
+			"generation": 1,
+			"creationTimestamp": null,
+			"labels": {
+				"app": "tomcat"
+			},
+			"annotations": {
+				"openshift.io/generated-by": "OpenShiftWebConsole"
+			}
+		}
+	}, {
+		"kind": "DeploymentConfig",
+		"apiVersion": "v1",
+		"metadata": {
+			"name": "mysql-56-centos7",
+			"creationTimestamp": null,
+			"labels": {
+				"app": "mysql-56-centos7"
+			},
+			"annotations": {
+				"openshift.io/generated-by": "OpenShiftNewApp"
+			}
+		},
+		"spec": {
+			"strategy": {
+				"type": "Rolling",
+				"rollingParams": {
+					"updatePeriodSeconds": 1,
+					"intervalSeconds": 1,
+					"timeoutSeconds": 600,
+					"maxUnavailable": "25%",
+					"maxSurge": "25%"
+				},
+				"resources": {}
+			},
+			"triggers": [{
+				"type": "ConfigChange"
+			}, {
+				"type": "ImageChange",
+				"imageChangeParams": {
+					"automatic": true,
+					"containerNames": [
+						"mysql-56-centos7"
+					],
+					"from": {
+						"kind": "ImageStreamTag",
+						"name": "mysql-56-centos7:latest"
+					}
+				}
+			}],
+			"replicas": 1,
+			"test": false,
+			"selector": {
+				"app": "mysql-56-centos7",
+				"deploymentconfig": "mysql-56-centos7"
+			},
+			"template": {
+				"metadata": {
+					"creationTimestamp": null,
+					"labels": {
+						"app": "mysql-56-centos7",
+						"deploymentconfig": "mysql-56-centos7"
+					},
+					"annotations": {
+						"openshift.io/container.mysql-56-centos7.image.entrypoint": "[\"run-mysqld.sh\",\"mysqld\"]",
+						"openshift.io/generated-by": "OpenShiftNewApp"
+					}
+				},
+				"spec": {
+					"volumes": [{
+						"name": "mysql-56-centos7-volume-1",
+						"emptyDir": {}
+					}],
+					"containers": [{
+						"name": "mysql-56-centos7",
+						"image": "openshift/mysql-56-centos7@sha256:3fd34fda8d10cae95a1e0756d90a8f7d5bc7b90d25ab65549a72ad2206cae92f",
+						"ports": [{
+							"containerPort": 3306,
+							"protocol": "TCP"
+						}],
+						"env": [{
+							"name": "MYSQL_DATABASE",
+							"value": "rest_demo"
+						}, {
+							"name": "MYSQL_PASSWORD",
+							"value": "rest_demo"
+						}, {
+							"name": "MYSQL_USER",
+							"value": "rest_demo"
+						}],
+						"resources": {},
+						"volumeMounts": [{
+							"name": "mysql-56-centos7-volume-1",
+							"mountPath": "/var/lib/mysql/data"
+
+						}],
+						"readinessProbe": {
+							"tcpSocket": {
+								"port": 3306
+							},
+							"timeoutSeconds": 1,
+							"periodSeconds": 10,
+							"successThreshold": 1,
+							"failureThreshold": 3
+						},
+						"terminationMessagePath": "/dev/termination-log",
+						"imagePullPolicy": "Always"
+					}],
+					"restartPolicy": "Always",
+					"terminationGracePeriodSeconds": 30,
+					"dnsPolicy": "ClusterFirst",
+					"securityContext": {}
+				}
+			}
+		},
+		"status": {}
+	}, {
+		"kind": "DeploymentConfig",
+		"apiVersion": "v1",
+		"metadata": {
+			"name": "tomcat",
+			"creationTimestamp": null,
+			"labels": {
+				"app": "tomcat"
+			},
+			"annotations": {
+				"openshift.io/generated-by": "OpenShiftWebConsole"
+			}
+		},
+		"spec": {
+			"strategy": {
+				"type": "Rolling",
+				"rollingParams": {
+					"updatePeriodSeconds": 1,
+					"intervalSeconds": 1,
+					"timeoutSeconds": 600,
+					"maxUnavailable": "25%",
+					"maxSurge": "25%"
+				},
+				"resources": {}
+			},
+			"triggers": [{
+				"type": "ImageChange",
+				"imageChangeParams": {
+					"automatic": true,
+					"containerNames": [
+						"tomcat"
+					],
+					"from": {
+						"kind": "ImageStreamTag",
+						"name": "tomcat:latest"
+					}
+				}
+			}, {
+				"type": "ConfigChange"
+			}],
+			"replicas": 1,
+			"test": false,
+			"selector": {
+				"deploymentconfig": "tomcat"
+			},
+			"template": {
+				"metadata": {
+					"creationTimestamp": null,
+					"labels": {
+						"app": "tomcat",
+						"deploymentconfig": "tomcat"
+					}
+				},
+				"spec": {
+					"containers": [{
+						"name": "tomcat",
+						"image": "tomcat",
+						"ports": [{
+							"containerPort": 8080,
+							"protocol": "TCP"
+						}, {
+							"containerPort": 8443,
+							"protocol": "TCP"
+						}, {
+							"containerPort": 8778,
+							"protocol": "TCP"
+						}],
+						"resources": {},
+						"terminationMessagePath": "/dev/termination-log",
+						"imagePullPolicy": "Always"
+					}],
+					"restartPolicy": "Always",
+					"terminationGracePeriodSeconds": 30,
+					"dnsPolicy": "ClusterFirst",
+					"securityContext": {}
+				}
+			}
+		},
+		"status": {}
+	}, {
+		"kind": "Route",
+		"apiVersion": "v1",
+		"metadata": {
+			"name": "tomcat",
+			"creationTimestamp": null,
+			"labels": {
+				"app": "tomcat"
+			},
+			"annotations": {
+				"openshift.io/generated-by": "OpenShiftWebConsole",
+				"openshift.io/host.generated": "true"
+			}
+		},
+		"spec": {
+			"host": "tomcat-rest.rhel-cdk.10.1.2.2.xip.io",
+			"to": {
+				"kind": "Service",
+				"name": "tomcat"
+			},
+			"port": {
+				"targetPort": "8080-tcp"
+			}
+		},
+		"status": {
+			"ingress": [{
+				"host": "tomcat-rest.rhel-cdk.10.1.2.2.xip.io",
+				"routerName": "router",
+				"conditions": [{
+					"type": "Admitted",
+					"status": "True",
+					"lastTransitionTime": "2016-10-14T17:59:37Z"
+				}]
+			}]
+		}
+	}, {
+		"kind": "Service",
+		"apiVersion": "v1",
+		"metadata": {
+			"name": "mysql-56-centos7",
+			"creationTimestamp": null,
+			"labels": {
+				"app": "mysql-56-centos7"
+			},
+			"annotations": {
+				"openshift.io/generated-by": "OpenShiftNewApp"
+			}
+		},
+		"spec": {
+			"ports": [{
+				"name": "3306-tcp",
+				"protocol": "TCP",
+				"port": 3306,
+				"targetPort": 3306
+			}],
+			"selector": {
+				"app": "mysql-56-centos7",
+				"deploymentconfig": "mysql-56-centos7"
+			},
+			"type": "ClusterIP",
+			"sessionAffinity": "None"
+		},
+		"status": {
+			"loadBalancer": {}
+		}
+	}, {
+		"kind": "Service",
+		"apiVersion": "v1",
+		"metadata": {
+			"name": "tomcat",
+			"creationTimestamp": null,
+			"labels": {
+				"app": "tomcat"
+			},
+			"annotations": {
+				"openshift.io/generated-by": "OpenShiftWebConsole"
+			}
+		},
+		"spec": {
+			"ports": [{
+				"name": "8080-tcp",
+				"protocol": "TCP",
+				"port": 8080,
+				"targetPort": 8080
+			}, {
+				"name": "8443-tcp",
+				"protocol": "TCP",
+				"port": 8443,
+				"targetPort": 8443
+			}, {
+				"name": "8778-tcp",
+				"protocol": "TCP",
+				"port": 8778,
+				"targetPort": 8778
+			}],
+			"selector": {
+				"deploymentconfig": "tomcat"
+			},
+			"type": "ClusterIP",
+			"sessionAffinity": "None"
+		},
+		"status": {
+			"loadBalancer": {}
+		}
+	}]
+}
