@@ -54,4 +54,11 @@ public class RegistrationRestController {
         return participantDao.findAll();
     }
 
+    @RequestMapping(value = "/register/{id}", method = RequestMethod.GET)
+    public Participant getParticipant(@PathVariable("id") long id) {
+        if (participantDao.exists(id)) {
+            return participantDao.findOne(id);
+        }
+        throw new RuntimeException("No record with id = " + id);
+    }
 }
