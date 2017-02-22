@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Iterator;
+
 @RestController
 public class RegistrationRestController {
 
@@ -45,6 +47,11 @@ public class RegistrationRestController {
             return participantDao.save(participant);
         }
         throw new RuntimeException("Invalid record " + participant.toString());
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public Iterable<Participant> getAllParticipant() {
+        return participantDao.findAll();
     }
 
 }
